@@ -30,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
         <Header />
-        <main>{children}</main>
+        <main className="flex flex-col flex-grow justify-center">
+          {children}
+        </main>
         <Footer currentYear={currentYear} />
       </body>
     </html>
