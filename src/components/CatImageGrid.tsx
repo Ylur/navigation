@@ -1,17 +1,15 @@
 "use client";
-//fékk þetta ekki til að virka samt, er API niðri?
-//prufaði nokkrar útgáfur.
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-interface ShrekImage {
+interface CatImage {
   id: number;
   url: string;
 }
 
-const ShrekImageGrid = () => {
-  const [images, setImages] = useState<ShrekImage[]>([]);
+const CatImageGrid = () => {
+  const [images, setImages] = useState<CatImage[]>([]);
   const [loadingImages, setLoadingImages] = useState(true);
   const [catFact, setCatFact] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
@@ -24,17 +22,19 @@ const ShrekImageGrid = () => {
     setLoadingImages(true);
     setFetchError(null);
     try {
-      const fetchedImages: ShrekImage[] = [];
+      const fetchedImages: CatImage[] = [];
       for (let i = 0; i < 9; i++) {
-        const response = await fetch("https://shreks.corneroftheinter.net/?img=url");
+        const response = await fetch(
+          "https://cataas.com/cat?width=100&height=100&json=true"
+        );
         if (!response.ok) {
           throw new Error(`Error fetching image: ${response.statusText}`);
         }
-        const imageUrl = response.headers.get("X-Shrek-Url");
-        if (imageUrl) {
-          fetchedImages.push({ id: i, url: imageUrl });
+        const data = await response.json();
+        if (data.url) {
+          fetchedImages.push({ id: i, url: `https://cataas.com${data.url}` });
         } else {
-          throw new Error("Image URL not found in response headers.");
+          throw new Error("Image URL not found in API response.");
         }
       }
       setImages(fetchedImages);
@@ -73,7 +73,9 @@ const ShrekImageGrid = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-center text-2xl mb-4">Shrek Image Grid with Cat Facts</h1>
+      <h1 className="text-center text-2xl mb-4">
+        Cat Image Grid with Cat Facts
+      </h1>
       {fetchError ? (
         <p className="text-center text-red-500">{fetchError}</p>
       ) : loadingImages ? (
@@ -85,17 +87,23 @@ const ShrekImageGrid = () => {
               key={index}
               className="relative"
               onClick={() => handleImageClick(index)}
-              style={{ width: "100px", height: "100px", margin: "8px" }}
+              style={{
+                width: "100px",
+                height: "100px",
+                margin: "8px",
+                borderRadius: "12px",
+                overflow: "hidden",
+              }}
             >
               <Image
                 src={image.url}
-                alt={`Shrek ${index + 1}`}
+                alt={`Cat ${index + 1}`}
                 width={100}
                 height={100}
-                className="rounded-lg object-cover"
+                className="object-cover"
               />
               {selectedImageIndex === index && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   {loadingFact ? (
                     <p className="text-white">Loading...</p>
                   ) : (
@@ -108,8 +116,11 @@ const ShrekImageGrid = () => {
         </div>
       )}
       <button
-        onClick={fetchImages}
-        className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
+        onClick={() => {
+          setSelectedImageIndex(null);
+          fetchImages();
+        }}
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
       >
         Refresh Images
       </button>
@@ -117,4 +128,4 @@ const ShrekImageGrid = () => {
   );
 };
 
-export default ShrekImageGrid;
+export default CatImageGrid;
