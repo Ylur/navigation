@@ -1,6 +1,6 @@
 "use client";
 
-import CatImageGrid  from "@/components/CatImageGrid";
+import CatImageGrid from "../components/CatImageGrid";
 import Hero from "../components/Hero";
 import MemeGenerator from "../components/memegenerator";
 
