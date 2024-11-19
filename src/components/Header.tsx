@@ -8,7 +8,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 flex justify-between items-center p-4 sm:p-8 bg-secondary bg-opacity-95 backdrop-filter backdrop-blur-lg shadow-md">
       {/* Logo and Title */}
       <div className="flex items-center space-x-4">
-        <Image src="/logo hér" alt="Shrek World" width={40} height={40} />
+        <Image src="/shrek.png" alt="Shrek World" width={40} height={40} />
         <div className="text-green-300 2xl font-bold hover:text-green-300"></div>
       </div>
 
